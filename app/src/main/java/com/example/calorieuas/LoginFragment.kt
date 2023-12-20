@@ -21,6 +21,8 @@ class LoginFragment : Fragment() {
     private val firebaseAuth = FirebaseAuth.getInstance()
     private val firestore = FirebaseFirestore.getInstance()
 
+    private lateinit var sessionManager: SessionManager
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -30,6 +32,8 @@ class LoginFragment : Fragment() {
 
         val textRegis = binding.textReqRegis
         val loginButton = binding.loginBtn
+
+        sessionManager = SessionManager(requireContext())
 
         textRegis.setOnClickListener {
             val viewPager = requireActivity().findViewById<ViewPager2>(R.id.loginViewPager)
@@ -44,6 +48,8 @@ class LoginFragment : Fragment() {
             firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(requireActivity()) { task ->
                     if (task.isSuccessful) {
+                        // Jika login berhasil, atur status login ke true
+                        sessionManager.isLoggedIn = true
                         // Jika login berhasil, cek role pengguna dan navigasikan ke halaman yang sesuai
                         checkUserRole()
                     } else {

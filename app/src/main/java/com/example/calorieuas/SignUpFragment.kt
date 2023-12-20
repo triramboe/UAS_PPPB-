@@ -23,6 +23,8 @@ class SignUpFragment : Fragment() {
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
 
+    private lateinit var sessionManager: SessionManager
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +42,8 @@ class SignUpFragment : Fragment() {
         firestore = FirebaseFirestore.getInstance()
 
         val textRegis = binding.textReqLogin
+
+        sessionManager = SessionManager(requireContext())
 
         textRegis.setOnClickListener{
             val viewPager = requireActivity().findViewById<ViewPager2>(R.id.loginViewPager)
@@ -100,6 +104,7 @@ class SignUpFragment : Fragment() {
     }
 
     private fun navigateToMainActivity() {
+        sessionManager.isLoggedIn = true
         val intent = Intent(activity, MainActivity::class.java)
         startActivity(intent)
         activity?.finish()
